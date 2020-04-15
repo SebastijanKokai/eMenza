@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "272304329346",
+    "firebase_url": "https://emenza-4fac9.firebaseio.com",
+    "project_id": "emenza-4fac9",
+    "storage_bucket": "emenza-4fac9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272304329346:android:d7563328a0424b4bf4da9b",
+        "android_client_info": {
+          "package_name": "test.eMenza.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272304329346-guec0bh9l5bq8cm7ep08l54p3fn0rbcc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMofwDdGQMkFZ7HqLONCUOLbmImknxn5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272304329346-guec0bh9l5bq8cm7ep08l54p3fn0rbcc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

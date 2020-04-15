@@ -16,6 +16,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eMenza.ui.login.LoginActivity;
+
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
 
@@ -38,21 +40,25 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public void showPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.setOnMenuItemClickListener(this);
-        popupMenu.inflate(R.menu.testmenu);
+        popupMenu.inflate(R.menu.mainmenu);
         popupMenu.show();
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.item1:
+            case R.id.profile:
                 Toast.makeText(this, "Item 1 clicked", Toast.LENGTH_SHORT);
                 return true;
-            case R.id.item2:
+            case R.id.restaurants:
                 Toast.makeText(this, "Item 2 clicked", Toast.LENGTH_SHORT);
                 return true;
-            case R.id.item3:
+            case R.id.notifications:
                 Toast.makeText(this, "Item 3 clicked", Toast.LENGTH_SHORT);
+                return true;
+            case R.id.log_out:
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
                 return true;
             default:
                 return false;

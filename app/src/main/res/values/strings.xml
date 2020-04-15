@@ -45,5 +45,22 @@
         <item>19</item>
         <item>20</item>
     </string-array>
+    <string name="title_activity_login">Prijavi se</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Lozinka</string>
+    <string name="action_sign_in">Prijavi se/Registruj se</string>
+    <string name="action_sign_in_short">Prijavi se</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="card_number">Broj kartice</string>
+    <string name="confirm_password">Potvrdi lozinku</string>
+
+    <string name="profile">Profil</string>
+    <string name="restaurants">Odabir restorana</string>
+    <string name="notifications">Obaveštenja</string>
+    <string name="log_out">Odjavi se</string>
+    <string name="register">Registracija</string>
 
 </resources>

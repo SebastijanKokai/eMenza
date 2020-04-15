@@ -105,35 +105,108 @@
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="80dp"
-        android:text="@string/plus"
-        app:layout_constraintStart_toEndOf="@+id/spinnerBreakfast"
-        app:layout_constraintTop_toBottomOf="@+id/btnPayment" />
-
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:id="@+id/btnMinusBreakfast"
+        android:layout_width="62dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="80dp"
         android:text="@string/minus"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/btnPayment" />
 
+    <Button
+        android:id="@+id/btnMinusDinner"
+        android:layout_width="62dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="58dp"
+        android:text="@string/minus"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/btnMinusLunch" />
+
+    <Button
+        android:id="@+id/btnMinusLunch"
+        android:layout_width="62dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="56dp"
+        android:text="@string/minus"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/btnMinusBreakfast" />
+
+    <Button
+        android:id="@+id/btnPlusBreakfast"
+        android:layout_width="62dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="33dp"
+        android:text="@string/plus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinnerBreakfast"
+        app:layout_constraintTop_toBottomOf="@+id/btnPayment" />
+
+    <Button
+        android:id="@+id/btnPlusDinner"
+        android:layout_width="62dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="33dp"
+        android:text="@string/plus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinnerDinner"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlusLunch" />
+
+    <Button
+        android:id="@+id/btnPlusLunch"
+        android:layout_width="62dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="54dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="33dp"
+        android:text="@string/plus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinnerLunch"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlusBreakfast" />
+
     <Spinner
         android:id="@+id/spinnerBreakfast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="80dp"
-        app:layout_constraintStart_toEndOf="@+id/button6"
+        android:layout_marginStart="31dp"
+        android:layout_marginLeft="31dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintStart_toEndOf="@+id/btnMinusBreakfast"
         app:layout_constraintTop_toBottomOf="@+id/btnPayment" />
+
+    <Spinner
+        android:id="@+id/spinnerDinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31dp"
+        android:layout_marginLeft="31dp"
+        android:layout_marginTop="70dp"
+        app:layout_constraintStart_toEndOf="@+id/btnMinusDinner"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerLunch" />
+
+    <Spinner
+        android:id="@+id/spinnerLunch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31dp"
+        android:layout_marginLeft="31dp"
+        android:layout_marginTop="70dp"
+        app:layout_constraintStart_toEndOf="@+id/btnMinusLunch"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerBreakfast" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

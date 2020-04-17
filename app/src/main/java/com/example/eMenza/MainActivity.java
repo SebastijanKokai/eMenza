@@ -16,7 +16,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.eMenza.ui.login.LoginActivity;
+import com.example.eMenza.login.LoginActivity;
+import com.example.eMenza.login.RegisterActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
@@ -48,17 +50,16 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.profile:
-                Toast.makeText(this, "Item 1 clicked", Toast.LENGTH_SHORT);
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 return true;
             case R.id.restaurants:
                 Toast.makeText(this, "Item 2 clicked", Toast.LENGTH_SHORT);
                 return true;
             case R.id.notifications:
-                Toast.makeText(this, "Item 3 clicked", Toast.LENGTH_SHORT);
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
                 return true;
             case R.id.log_out:
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(i);
+                logout();
                 return true;
             default:
                 return false;
@@ -85,7 +86,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                     .findViewById(R.id.id_index_gallery_item_text);
             txt.setText("info " + i);
             mGallery.addView(view);
+
         }
+    }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        finish();
     }
 
     private void setListeners() {
@@ -102,3 +110,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
 }
 
+// @TODO
+// Profil
+// Unos kreditne kartice
+// Funkcionalnost payment
+// MainActivity galerija hrane
+// Promena restorana
+// Obavestenja

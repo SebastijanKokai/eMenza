@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "846811713355",
+    "firebase_url": "https://emenza-b6e7f.firebaseio.com",
+    "project_id": "emenza-b6e7f",
+    "storage_bucket": "emenza-b6e7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846811713355:android:f210a7868a42e3836ca2ce",
+        "android_client_info": {
+          "package_name": "com.example.eMenza"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846811713355-7cd9dl34l9hf6lom7nn940j6spl86umf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eMenza",
+            "certificate_hash": "02096c6b8cf8b1101321dce66708330fa67aab96"
+          }
+        },
+        {
+          "client_id": "846811713355-rimonede7pd97ts4nn2e3ik97eqchkv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnhuagC2RXMP0Kj05e37NqJHNcDGpY9CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846811713355-rimonede7pd97ts4nn2e3ik97eqchkv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

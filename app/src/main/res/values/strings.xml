@@ -48,9 +48,9 @@
     <string name="title_activity_login">Prijavi se</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Lozinka</string>
-    <string name="action_sign_in">Prijavi se/Registruj se</string>
-    <string name="action_sign_in_short">Prijavi se</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="action_sign_in">Prijavi se</string>
+    <string name="action_register">Registruj se</string>
+    <string name="welcome">"Welcome!"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
@@ -61,6 +61,12 @@
     <string name="restaurants">Odabir restorana</string>
     <string name="notifications">Obaveštenja</string>
     <string name="log_out">Odjavi se</string>
-    <string name="register">Registracija</string>
+    <string name="register">Nemas nalog? Registruj se</string>
+
+    <string name="already_registered">Vec si registrovan? Prijavi se</string>
+
+    <string name="balance">Iznos na racunu: %1$s rsd</string>
+    <string name="price">Cena: %1$s rsd</string>
+    <string name="afterTransaction">Iznos posle transakcije: %1$s rsd</string>
 
 </resources>

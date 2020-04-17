@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.eMenza">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
@@ -15,9 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".login.RegisterActivity" />
+        <activity android:name=".login.LoginActivity" />
         <activity
             android:name=".Payment"
             android:label="@string/activityPaymentName" />

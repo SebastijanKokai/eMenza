@@ -1,10 +1,7 @@
 package com.example.eMenza;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.sip.SipSession;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,14 +13,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.eMenza.login.LoginActivity;
-import com.example.eMenza.login.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
-
-import java.math.BigDecimal;
-import java.util.Currency;
 
 public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener  {
 
@@ -70,6 +63,7 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
             case R.id.restaurants:
                 return true;
             case R.id.notifications:
+                startActivity(new Intent(getApplicationContext(), Notifications.class));
                 return true;
             case R.id.log_out:
                 logout();
@@ -89,8 +83,10 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         Spinner spinnerBreakfast = (Spinner) findViewById(R.id.spinnerBreakfast);
         Spinner spinnerLunch = (Spinner) findViewById(R.id.spinnerLunch);
         Spinner spinnerDinner = (Spinner) findViewById(R.id.spinnerDinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.paymentChoices, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.paymentChoices,
+                R.layout.color_spinner_layout);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerBreakfast.setAdapter(adapter);
         spinnerLunch.setAdapter(adapter);
@@ -105,28 +101,35 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         Button btnPlusBreakfast = (Button) findViewById(R.id.btnPlusBreakfast);
         Button btnPlusLunch = (Button) findViewById(R.id.btnPlusLunch);
         Button btnPlusDinner = (Button) findViewById(R.id.btnPlusDinner);
+        Button btnMenu = (Button) findViewById(R.id.btnMenu);
+        Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
         // spinners
-        Spinner spinnerBreakfast = (Spinner) findViewById(R.id.spinnerBreakfast);
-        Spinner spinnerLunch = (Spinner) findViewById(R.id.spinnerLunch);
-        Spinner spinnerDinner = (Spinner) findViewById(R.id.spinnerDinner);
+        final Spinner spinnerBreakfast = (Spinner) findViewById(R.id.spinnerBreakfast);
+        final Spinner spinnerLunch = (Spinner) findViewById(R.id.spinnerLunch);
+        final Spinner spinnerDinner = (Spinner) findViewById(R.id.spinnerDinner);
 
         btnMinusBreakfast.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(breakfast > 0) {
                     breakfast--;
+                    countPrice();
                     Spinner spinnerBreakfast = (Spinner) findViewById(R.id.spinnerBreakfast);
                     spinnerBreakfast.setSelection(breakfast);
-                    countPrice();
+                    }
                 }
-            }
         });
         btnPlusBreakfast.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(breakfast < 20) {
                     breakfast++;
-                    Spinner spinnerBreakfast = (Spinner) findViewById(R.id.spinnerBreakfast);
-                    spinnerBreakfast.setSelection(breakfast);
                     countPrice();
+                    if(balanceAfter < 0) {
+                        breakfast--;
+                        Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Spinner spinnerBreakfast = (Spinner) findViewById(R.id.spinnerBreakfast);
+                        spinnerBreakfast.setSelection(breakfast);
+                    }
                 }
             }
         });
@@ -144,9 +147,14 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
             public void onClick(View v) {
                 if(lunch < 20) {
                     lunch++;
-                    Spinner spinnerLunch = (Spinner) findViewById(R.id.spinnerLunch);
-                    spinnerLunch.setSelection(lunch);
                     countPrice();
+                    if(balanceAfter < 0) {
+                        lunch--;
+                        Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Spinner spinnerLunch = (Spinner) findViewById(R.id.spinnerLunch);
+                        spinnerLunch.setSelection(lunch);
+                    }
                 }
             }
         });
@@ -164,17 +172,29 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
             public void onClick(View v) {
                 if(dinner < 20) {
                     dinner++;
-                    Spinner spinnerDinner = (Spinner) findViewById(R.id.spinnerDinner);
-                    spinnerDinner.setSelection(dinner);
                     countPrice();
+                    if(balanceAfter < 0) {
+                        dinner--;
+                        Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Spinner spinnerDinner = (Spinner) findViewById(R.id.spinnerDinner);
+                        spinnerDinner.setSelection(dinner);
+                    }
                 }
             }
         });
         spinnerBreakfast.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                int oldPosition = breakfast;
                 breakfast=position;
                 countPrice();
+                if(balanceAfter < 0) {
+                    breakfast = oldPosition;
+
+                    spinnerBreakfast.setSelection(oldPosition);
+                    Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -185,8 +205,15 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         spinnerLunch.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                int oldPosition = lunch;
                 lunch=position;
                 countPrice();
+                if(balanceAfter < 0) {
+                    lunch = oldPosition;
+
+                    spinnerLunch.setSelection(oldPosition);
+                    Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -197,11 +224,14 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         spinnerDinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                int oldPosition = dinner;
                 dinner=position;
-                if(balance >= price) {
-                    countPrice();
-                } else {
-                    Toast.makeText(getApplicationContext(), "The price is too high.", Toast.LENGTH_SHORT).show();
+                countPrice();
+                if(balanceAfter < 0) {
+                    dinner = oldPosition;
+
+                    spinnerDinner.setSelection(oldPosition);
+                    Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -210,20 +240,41 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
             }
 
         });
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        });
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // promeni podatke u firebase
+                // ispisi uspesno ako jeste
+                // ispisi gresku ako ima error
+                // posalji me na main activity
+            }
+        });
+
     }
 
     private void countPrice() {
             price = breakfast * breakfastPrice + lunch * lunchPrice + dinner * dinnerPrice;
             balanceAfter = balance - price;
 
-            Resources res = getResources();
-            String text = String.format(res.getString(R.string.price), price.toString());
-            TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
-            txtPrice.setText(text);
+            if(balanceAfter >= 0) {
+                Resources res = getResources();
+                String text = String.format(res.getString(R.string.price), price.toString());
+                TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
+                txtPrice.setText(text);
 
-            text = String.format(res.getString(R.string.afterTransaction), balanceAfter.toString());
-            TextView txtAfter = (TextView) findViewById(R.id.txtAfter);
-            txtAfter.setText(text);
+                text = String.format(res.getString(R.string.afterTransaction), balanceAfter.toString());
+                TextView txtAfter = (TextView) findViewById(R.id.txtAfter);
+                txtAfter.setText(text);
+            } else {
+
+            }
 
 
     }

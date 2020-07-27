@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/profile"
         android:title="@string/profile" />
-    <item android:id="@+id/restaurants"
+    <item android:id="@+id/restaurants" android:enabled="false"
         android:title="@string/restaurants" />
     <item android:id="@+id/notifications"
         android:title="@string/notifications" />

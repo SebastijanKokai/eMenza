@@ -68,5 +68,10 @@
     <string name="balance">Iznos na racunu: %1$s rsd</string>
     <string name="price">Cena: %1$s rsd</string>
     <string name="afterTransaction">Iznos posle transakcije: %1$s rsd</string>
+    <string name="paymentPriceError">Cena je previsoka.</string>
+
+    <string name="breakfastState">10</string>
+    <string name="lunchState">10</string>
+    <string name="dinnerState">10</string>
 
 </resources>

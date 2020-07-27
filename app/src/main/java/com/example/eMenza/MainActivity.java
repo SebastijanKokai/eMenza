@@ -2,30 +2,29 @@ package com.example.eMenza;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 import com.example.eMenza.login.LoginActivity;
-import com.example.eMenza.login.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
 
     private LinearLayout mGallery;
-    private int[] mImgIds;
+    private String imageUrls[];
     private LayoutInflater mInflater;
+    private String txtOfImgs[];
     private HorizontalScrollView horizontalScrollView;
 
     @Override
@@ -53,10 +52,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 return true;
             case R.id.restaurants:
-                Toast.makeText(this, "Item 2 clicked", Toast.LENGTH_SHORT);
                 return true;
             case R.id.notifications:
-                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+                startActivity(new Intent(getApplicationContext(), Notifications.class));
                 return true;
             case R.id.log_out:
                 logout();
@@ -67,7 +65,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     private void initData() {
-        mImgIds = new int[] { R.drawable.ic_logo_background, R.drawable.roundbutton, R.drawable.ic_launcher_background,R.drawable.ic_launcher_foreground
+        imageUrls = new String[]{"http://kulinarskirecepti.info/wp-content/uploads/2014/09/pasulj_1345537802_670x0-575x262.jpg",
+                "https://i.pinimg.com/736x/21/be/4b/21be4b308e1627d76464c81ca2a0b476.jpg",
+                "https://i.ytimg.com/vi/UWOcYRrRxDY/maxresdefault.jpg",
+                "http://gurmanija.com/wp-content/uploads/2016/04/musaka-od-krompira22.jpg"
+        };
+        txtOfImgs = new String[] {
+                "Pasulj", "Snicle", "Fasir", "Musaka"
         };
     }
 
@@ -75,18 +79,17 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         mGallery = (LinearLayout) findViewById(R.id.id_gallery);
 
-        for (int i = 0; i < mImgIds.length; i++) {
+        for (int i = 0; i < imageUrls.length; i++) {
 
             View view = mInflater.inflate(R.layout.gallery_item,
                     mGallery, false);
             ImageView img = (ImageView) view
                     .findViewById(R.id.id_index_gallery_item_image);
-            img.setImageResource(mImgIds[i]);
+            Glide.with(this).load(imageUrls[i]).into(img);
             TextView txt = (TextView) view
                     .findViewById(R.id.id_index_gallery_item_text);
-            txt.setText("info " + i);
+            txt.setText(txtOfImgs[i]);
             mGallery.addView(view);
-
         }
     }
 
@@ -108,12 +111,22 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         });
     }
 
+
+
 }
 
 // @TODO
 // Profil
 // Unos kreditne kartice
-// Funkcionalnost payment
-// MainActivity galerija hrane
-// Promena restorana
+// POTVRDI BUTTON DA POSALJE U FIREBASE
+// menjaj balance i promeni broj obroka
+
+// Glide - open image from URL
+// Jsoup - get HTML from web page
 // Obavestenja
+
+
+// @TODO
+// AI to Android XML
+
+

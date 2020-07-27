@@ -1,8 +1,5 @@
 package com.example.eMenza.login;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +9,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eMenza.MainActivity;
 import com.example.eMenza.R;
@@ -74,17 +74,17 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
-
                 // Authenticate the user
 
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
+                            progressBar.setVisibility(View.VISIBLE);
                             Toast.makeText(LoginActivity.this, "Logged in.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
+                            progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }

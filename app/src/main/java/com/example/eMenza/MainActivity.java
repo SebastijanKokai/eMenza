@@ -22,10 +22,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
 
     private LinearLayout mGallery;
-    private String imageUrls[];
+    private String[] imageUrls;
     private LayoutInflater mInflater;
-    private String txtOfImgs[];
+    private String[] txtOfImgs;
     private HorizontalScrollView horizontalScrollView;
+    User user;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.profile:
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                i.putExtra("user", user);
+                startActivity(i);
                 return true;
             case R.id.restaurants:
                 return true;
@@ -73,24 +78,44 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         txtOfImgs = new String[] {
                 "Pasulj", "Snicle", "Fasir", "Musaka"
         };
+
+
+
+        if(getIntent() != null) {
+            Intent i = getIntent();
+            user = i.getParcelableExtra("user");
+        }
+
     }
 
     private void initView() {
 
-        mGallery = (LinearLayout) findViewById(R.id.id_gallery);
+        mGallery = findViewById(R.id.id_gallery);
 
         for (int i = 0; i < imageUrls.length; i++) {
 
             View view = mInflater.inflate(R.layout.gallery_item,
                     mGallery, false);
-            ImageView img = (ImageView) view
+            ImageView img = view
                     .findViewById(R.id.id_index_gallery_item_image);
             Glide.with(this).load(imageUrls[i]).into(img);
-            TextView txt = (TextView) view
+            TextView txt = view
                     .findViewById(R.id.id_index_gallery_item_text);
             txt.setText(txtOfImgs[i]);
             mGallery.addView(view);
         }
+        if(user != null) {
+            Button btnBreakfast = findViewById(R.id.btnBreakfast);
+            Button btnLunch = findViewById(R.id.btnLunch);
+            Button btnDinner = findViewById(R.id.btnDinner);
+
+            // Setting data for buttons
+            btnBreakfast.setText(String.valueOf(user.numberOfBreakfast));
+            btnLunch.setText(String.valueOf(user.numberOfLunch));
+            btnDinner.setText(String.valueOf(user.numberOfDinner));
+        }
+
+
     }
 
     private void logout() {

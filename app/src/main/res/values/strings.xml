@@ -74,4 +74,14 @@
     <string name="lunchState">10</string>
     <string name="dinnerState">10</string>
 
+
+    <string name="profileName">Ime i prezime: </string>
+    <string name="profileCollege">Studira na: </string>
+    <string name="profileIndex">Broj indeksa: </string>
+    <string name="profileCardNumber">Broj kartice: </string>
+    <string name="profileBirthDate">Datum rodjenja: </string>
+    <string name="profileDateOfIssue">Datum izdavanja kartice: </string>
+    <string name="profileDateOfExpire">Vazi do: </string>
+
+
 </resources>

@@ -56,16 +56,7 @@
                 tools:ignore="VectorDrawableCompat" />
 
             <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Aljosa Krizan"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-            <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/txtCollege"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fakultet tehnickih nauka"
@@ -74,16 +65,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/txtName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="IT69/2017"
+                android:text="Aljosa Krizan"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/txtBirthDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="22.2.1999."
@@ -92,7 +83,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/txtDateOfIssue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Datum izdavanja"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+            <TextView
+                android:id="@+id/txtDateExpire"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Vazi do"
@@ -101,20 +100,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
             <TextView
-                android:id="@+id/textView14"
+                android:id="@+id/txtIndex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IT69/2017"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+
+            <TextView
+                android:id="@+id/txtCardNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Broj kartice"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Datum izdavanja"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
 
             <View
                 android:layout_width="match_parent"

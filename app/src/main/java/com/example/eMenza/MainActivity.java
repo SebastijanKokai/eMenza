@@ -15,20 +15,22 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.eMenza.classes.User;
 import com.example.eMenza.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
+    // User STRING
+    public static final String USER_KEY = "user";
 
+    private Button btnPayment;
     private LinearLayout mGallery;
     private String[] imageUrls;
     private LayoutInflater mInflater;
     private String[] txtOfImgs;
     private HorizontalScrollView horizontalScrollView;
     User user;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +52,19 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        Intent i;
         switch(item.getItemId()) {
             case R.id.profile:
-                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
-                i.putExtra("user", user);
+                i = new Intent(MainActivity.this, ProfileActivity.class);
+                i.putExtra(USER_KEY, user);
                 startActivity(i);
                 return true;
             case R.id.restaurants:
                 return true;
             case R.id.notifications:
-                startActivity(new Intent(getApplicationContext(), Notifications.class));
+                i = new Intent(MainActivity.this, NotificationActivity.class);
+                i.putExtra(USER_KEY, user);
+                startActivity(i);
                 return true;
             case R.id.log_out:
                 logout();
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         if(getIntent() != null) {
             Intent i = getIntent();
-            user = i.getParcelableExtra("user");
+            user = i.getParcelableExtra(USER_KEY);
         }
 
     }
@@ -110,9 +115,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             Button btnDinner = findViewById(R.id.btnDinner);
 
             // Setting data for buttons
-            btnBreakfast.setText(String.valueOf(user.numberOfBreakfast));
-            btnLunch.setText(String.valueOf(user.numberOfLunch));
-            btnDinner.setText(String.valueOf(user.numberOfDinner));
+            btnBreakfast.setText(String.valueOf(user.getNumberOfBreakfast()));
+            btnLunch.setText(String.valueOf(user.getNumberOfLunch()));
+            btnDinner.setText(String.valueOf(user.getNumberOfDinner()));
+
+            if(user.getCreditCard() != null) {
+                btnPayment.setEnabled(true);
+            }
         }
 
 
@@ -126,14 +135,18 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     private void setListeners() {
 
-        Button btnPayment = (Button)findViewById(R.id.btnPayment);
+        btnPayment = (Button)findViewById(R.id.btnPayment);
         btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, Payment.class);
+                Intent i = new Intent(MainActivity.this, PaymentActivity.class);
+                i.putExtra(USER_KEY, user);
                 startActivity(i);
             }
         });
+
+        // If credit card doesn't exist
+        btnPayment.setEnabled(false);
     }
 
 

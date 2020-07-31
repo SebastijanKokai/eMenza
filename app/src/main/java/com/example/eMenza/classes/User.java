@@ -1,9 +1,7 @@
-package com.example.eMenza;
+package com.example.eMenza.classes;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.io.Serializable;
 
 public class User implements Parcelable {
     private String name;
@@ -16,6 +14,9 @@ public class User implements Parcelable {
     private String email;
     private String password;
     private String index;
+    private CreditCard creditCard = null;
+
+
     Integer numberOfBreakfast = 0, numberOfLunch = 0, numberOfDinner = 0;
 
     public User() {
@@ -51,23 +52,20 @@ public class User implements Parcelable {
 
     // Parcel part
     public User(Parcel in) {
-        String[] data = new String[13];
-
-        in.readStringArray(data);
-        this.name = data[0];
-        this.surname = data[1];
-        this.college = data[2];
-        this.cardNumber = data[3];
-        this.dateOfBirth = data[4];
-        this.dateOfIssue = data[5];
-        this.dateOfExpire = data[6];
-        this.email = data[7];
-        this.password = data[8];
-        this.index = data[9];
-        this.numberOfBreakfast = Integer.parseInt(data[10]);
-        this.numberOfLunch = Integer.parseInt(data[11]);
-        this.numberOfDinner = Integer.parseInt(data[12]);
-
+        this.name = in.readString();
+        this.surname = in.readString();
+        this.college = in.readString();
+        this.cardNumber = in.readString();
+        this.dateOfBirth = in.readString();
+        this.dateOfIssue = in.readString();
+        this.dateOfExpire = in.readString();
+        this.email = in.readString();
+        this.password = in.readString();
+        this.index = in.readString();
+        this.numberOfBreakfast = in.readInt();
+        this.numberOfLunch = in.readInt();
+        this.numberOfDinner = in.readInt();
+        this.creditCard = (CreditCard) in.readParcelable(CreditCard.class.getClassLoader());
     }
 
     @Override
@@ -76,11 +74,21 @@ public class User implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        // TODO Auto-generated method stub
-
-        dest.writeStringArray(new String[]{this.name,this.surname, this.college, this.cardNumber, this.dateOfBirth, this.dateOfIssue, this.dateOfExpire, this.email,
-                this.password, this.index, String.valueOf(this.numberOfBreakfast), String.valueOf(this.numberOfLunch), String.valueOf(this.numberOfDinner) });
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(this.name);
+        parcel.writeString(this.surname);
+        parcel.writeString(this.college);
+        parcel.writeString(this.cardNumber);
+        parcel.writeString(this.dateOfBirth);
+        parcel.writeString(this.dateOfIssue);
+        parcel.writeString(this.dateOfExpire);
+        parcel.writeString(this.email);
+        parcel.writeString(this.password);
+        parcel.writeString(this.index);
+        parcel.writeInt(this.numberOfBreakfast);
+        parcel.writeInt(this.numberOfLunch);
+        parcel.writeInt(this.numberOfDinner);
+        parcel.writeParcelable(creditCard, flags);
     }
 
     public static final Parcelable.Creator<User> CREATOR= new Parcelable.Creator<User>() {
@@ -201,4 +209,13 @@ public class User implements Parcelable {
     public void setIndex(String index) {
         this.index = index;
     }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+
 }

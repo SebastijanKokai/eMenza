@@ -1,4 +1,4 @@
-package com.example.eMenza;
+package com.example.eMenza.classes;
 
 import org.jsoup.nodes.Element;
 

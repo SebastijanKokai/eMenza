@@ -8,29 +8,38 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.eMenza.classes.User;
 import com.example.eMenza.login.LoginActivity;
-import com.example.eMenza.login.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.net.URL;
 
+import static com.example.eMenza.MainActivity.USER_KEY;
+
 public class ProfileActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
-    User user = null;
+    private Button btnPayment;
+    private Button btnInsertCard;
+    private Button btnMenu;
+    private User user = null;
+    private TextView txtName;
+    private TextView txtCollege;
+    private TextView txtIndex;
+    private TextView txtBirthDate;
+    private TextView txtCardNumber;
+    private TextView txtDateExpire;
+    private TextView txtDateOfIssue;
+    private TextView txtCreditCardNumber;
+    private TextView txtDateExpiration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-
 
         setListeners();
         initData();
@@ -45,8 +54,8 @@ public class ProfileActivity extends AppCompatActivity implements PopupMenu.OnMe
             case R.id.restaurants:
                 return true;
             case R.id.notifications:
-                Intent i = new Intent(ProfileActivity.this, Notifications.class);
-                i.putExtra("user", user);
+                Intent i = new Intent(ProfileActivity.this, NotificationActivity.class);
+                i.putExtra(USER_KEY, user);
                 startActivity(i);
                 return true;
             case R.id.log_out:
@@ -67,19 +76,19 @@ public class ProfileActivity extends AppCompatActivity implements PopupMenu.OnMe
     private void initData() {
         if(getIntent() != null) {
             Intent i = getIntent();
-            user = (User)i.getParcelableExtra("user");
+            user = i.getParcelableExtra(USER_KEY);
         }
     }
 
     private void initView() {
         if(user != null) {
-            TextView txtName = findViewById(R.id.txtName);
-            TextView txtCollege = findViewById(R.id.txtCollege);
-            TextView txtIndex = findViewById(R.id.txtIndex);
-            TextView txtBirthDate = findViewById(R.id.txtBirthDate);
-            TextView txtCardNumber = findViewById(R.id.txtCardNumber);
-            TextView txtDateExpire = findViewById(R.id.txtDateExpire);
-            TextView txtDateOfIssue = findViewById(R.id.txtDateOfIssue);
+            txtName = findViewById(R.id.txtName);
+            txtCollege = findViewById(R.id.txtCollege);
+            txtIndex = findViewById(R.id.txtIndex);
+            txtBirthDate = findViewById(R.id.txtBirthDate);
+            txtCardNumber = findViewById(R.id.txtCardNumber);
+            txtDateExpire = findViewById(R.id.txtDateExpire);
+            txtDateOfIssue = findViewById(R.id.txtDateOfIssue);
 
             txtName.setText(getString(R.string.profileName) + user.getName() + " " + user.getSurname());
             txtCollege.setText(getString(R.string.profileCollege) + user.getCollege());
@@ -88,6 +97,19 @@ public class ProfileActivity extends AppCompatActivity implements PopupMenu.OnMe
             txtCardNumber.setText(getString(R.string.profileCardNumber) + user.getCardNumber());
             txtDateExpire.setText(getString(R.string.profileDateOfExpire) + user.getDateOfExpire());
             txtDateOfIssue.setText(getString(R.string.profileDateOfIssue) + user.getDateOfIssue());
+
+            if(user.getCreditCard() != null) {
+                btnInsertCard.setText("Izmeni kreditnu karticu");
+                btnPayment.setEnabled(true);
+                txtCreditCardNumber = findViewById(R.id.txtProfileCreditCard);
+                txtDateExpiration = findViewById(R.id.txtProfileDateExpiration);
+
+                txtCreditCardNumber.setText("Broj kreditne kartice: " + user.getCreditCard().getCardNumber());
+                txtDateExpiration.setText("Vazi do: " + user.getCreditCard().getDateExpiration());
+
+                txtCreditCardNumber.setVisibility(View.VISIBLE);
+                txtDateExpiration.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -99,22 +121,34 @@ public class ProfileActivity extends AppCompatActivity implements PopupMenu.OnMe
 
     private void setListeners() {
 
-        Button btnPayment = findViewById(R.id.btnPayment);
+        btnPayment = findViewById(R.id.btnPayment);
         btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ProfileActivity.this, Payment.class);
-                i.putExtra("user", user);
+                Intent i = new Intent(ProfileActivity.this, PaymentActivity.class);
+                i.putExtra(USER_KEY, user);
                 startActivity(i);
             }
         });
+        // If credit card doesn't exist
+        btnPayment.setEnabled(false);
 
-        Button btnMenu = findViewById(R.id.btnMenu);
+        btnMenu = findViewById(R.id.btnMenu);
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(ProfileActivity.this, MainActivity.class);
-                i.putExtra("user", user);
+                i.putExtra(USER_KEY, user);
+                startActivity(i);
+            }
+        });
+
+        btnInsertCard = findViewById(R.id.btnInsertCard);
+        btnInsertCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProfileActivity.this, CreditCardActivity.class);
+                i.putExtra(USER_KEY, user);
                 startActivity(i);
             }
         });

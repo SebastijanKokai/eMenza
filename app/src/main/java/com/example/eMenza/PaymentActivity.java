@@ -13,16 +13,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.eMenza.classes.User;
 import com.example.eMenza.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener  {
+import static com.example.eMenza.MainActivity.USER_KEY;
 
-    private int breakfast=0;
-    private int lunch=0;
-    private int dinner=0;
+public class PaymentActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+
+    private int breakfast = 0;
+    private int lunch = 0;
+    private int dinner = 0;
 
     private final Double breakfastPrice = 40.0;
     private final Double lunchPrice = 72.0;
@@ -31,20 +40,41 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
     private Double price = 0.0;
     private Double balanceAfter = 0.0;
 
+    // Database
+    private FirebaseDatabase rootNode;
+    private DatabaseReference reference;
+    private FirebaseAuth firebaseAuth;
+
+    // User
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        initData();
+
         SetSpinners();
         SetListeners();
 
-        balance = 1260.0;
+        firebaseAuth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference();
+
+        // Get balance from credit card and put into variable balance
+        balance = 10000.0;
+
         Resources res = getResources();
         String text = String.format(res.getString(R.string.balance), balance.toString());
         TextView txtBalance = (TextView) findViewById(R.id.txtBalance);
         txtBalance.setText(text);
 
         countPrice();
+    }
+
+    private void initData() {
+        if(getIntent() != null) {
+            user = getIntent().getParcelableExtra(USER_KEY);
+        }
     }
 
     public void showPopup(View v) {
@@ -56,14 +86,19 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch(item.getItemId()) {
+        Intent i;
+        switch (item.getItemId()) {
             case R.id.profile:
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                i = new Intent(PaymentActivity.this, ProfileActivity.class);
+                i.putExtra(USER_KEY, user);
+                startActivity(i);
                 return true;
             case R.id.restaurants:
                 return true;
             case R.id.notifications:
-                startActivity(new Intent(getApplicationContext(), Notifications.class));
+                i = new Intent(PaymentActivity.this, NotificationActivity.class);
+                i.putExtra(USER_KEY, user);
+                startActivity(i);
                 return true;
             case R.id.log_out:
                 logout();
@@ -93,6 +128,7 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         spinnerDinner.setAdapter(adapter);
 
     }
+
     private void SetListeners() {
         // buttons
         Button btnMinusBreakfast = (Button) findViewById(R.id.btnMinusBreakfast);
@@ -110,20 +146,20 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
 
         btnMinusBreakfast.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(breakfast > 0) {
+                if (breakfast > 0) {
                     breakfast--;
                     countPrice();
                     Spinner spinnerBreakfast = (Spinner) findViewById(R.id.spinnerBreakfast);
                     spinnerBreakfast.setSelection(breakfast);
-                    }
                 }
+            }
         });
         btnPlusBreakfast.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(breakfast < 20) {
+                if (breakfast < 20) {
                     breakfast++;
                     countPrice();
-                    if(balanceAfter < 0) {
+                    if (balanceAfter < 0) {
                         breakfast--;
                         Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
                     } else {
@@ -135,7 +171,7 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         });
         btnMinusLunch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(lunch > 0) {
+                if (lunch > 0) {
                     lunch--;
                     Spinner spinnerLunch = (Spinner) findViewById(R.id.spinnerLunch);
                     spinnerLunch.setSelection(lunch);
@@ -145,10 +181,10 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         });
         btnPlusLunch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(lunch < 20) {
+                if (lunch < 20) {
                     lunch++;
                     countPrice();
-                    if(balanceAfter < 0) {
+                    if (balanceAfter < 0) {
                         lunch--;
                         Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
                     } else {
@@ -160,7 +196,7 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         });
         btnMinusDinner.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(dinner > 0) {
+                if (dinner > 0) {
                     dinner--;
                     Spinner spinnerDinner = (Spinner) findViewById(R.id.spinnerDinner);
                     spinnerDinner.setSelection(dinner);
@@ -170,10 +206,10 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         });
         btnPlusDinner.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(dinner < 20) {
+                if (dinner < 20) {
                     dinner++;
                     countPrice();
-                    if(balanceAfter < 0) {
+                    if (balanceAfter < 0) {
                         dinner--;
                         Toast.makeText(getApplicationContext(), R.string.paymentPriceError, Toast.LENGTH_SHORT).show();
                     } else {
@@ -187,9 +223,9 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 int oldPosition = breakfast;
-                breakfast=position;
+                breakfast = position;
                 countPrice();
-                if(balanceAfter < 0) {
+                if (balanceAfter < 0) {
                     breakfast = oldPosition;
 
                     spinnerBreakfast.setSelection(oldPosition);
@@ -206,9 +242,9 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 int oldPosition = lunch;
-                lunch=position;
+                lunch = position;
                 countPrice();
-                if(balanceAfter < 0) {
+                if (balanceAfter < 0) {
                     lunch = oldPosition;
 
                     spinnerLunch.setSelection(oldPosition);
@@ -225,9 +261,9 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 int oldPosition = dinner;
-                dinner=position;
+                dinner = position;
                 countPrice();
-                if(balanceAfter < 0) {
+                if (balanceAfter < 0) {
                     dinner = oldPosition;
 
                     spinnerDinner.setSelection(oldPosition);
@@ -242,7 +278,9 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
         });
         btnMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                Intent i = new Intent(PaymentActivity.this, MainActivity.class);
+                i.putExtra(USER_KEY, user);
+                startActivity(i);
             }
         });
 
@@ -250,32 +288,74 @@ public class Payment extends AppCompatActivity implements PopupMenu.OnMenuItemCl
 
             @Override
             public void onClick(View v) {
-                // promeni podatke u firebase
-                // ispisi uspesno ako jeste
-                // ispisi gresku ako ima error
-                // posalji me na main activity
+                // UPDATE THE BALANCE OF CREDIT CARD
+                price = breakfast * breakfastPrice + lunch * lunchPrice + dinner * dinnerPrice;
+                balance = balanceAfter;
+
+                reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseAuth.getCurrentUser().getUid());
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        // UPDATE THE MEALS AFTER REMOVING CASH FROM CREDIT CARD BALANCE
+                        User user = snapshot.getValue(User.class);
+                        boolean success = false;
+
+                        if(breakfast > 0) {
+                            int breakfastDB = user.getNumberOfBreakfast();
+                            reference.child("numberOfBreakfast").setValue(breakfast + breakfastDB);
+                            user.setNumberOfBreakfast(breakfast + breakfastDB);
+                            success = true;
+                        }
+
+                        if(lunch > 0) {
+                            int lunchDB = user.getNumberOfLunch();
+                            reference.child("numberOfLunch").setValue(lunch + lunchDB);
+                            user.setNumberOfLunch(lunch + lunchDB);
+                            success = true;
+                        }
+
+                        if(dinner > 0) {
+                            int dinnerDB = user.getNumberOfDinner();
+                            reference.child("numberOfDinner").setValue(dinner + dinnerDB);
+                            user.setNumberOfDinner(dinner + dinnerDB);
+                            success = true;
+                        }
+
+                        if(success) {
+                            Toast.makeText(PaymentActivity.this, "Payment successful.", Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(PaymentActivity.this, MainActivity.class);
+                            i.putExtra(USER_KEY, user);
+                            startActivity(i);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
 
     }
 
     private void countPrice() {
-            price = breakfast * breakfastPrice + lunch * lunchPrice + dinner * dinnerPrice;
-            balanceAfter = balance - price;
+        price = breakfast * breakfastPrice + lunch * lunchPrice + dinner * dinnerPrice;
+        balanceAfter = balance - price;
 
-            if(balanceAfter >= 0) {
-                Resources res = getResources();
-                String text = String.format(res.getString(R.string.price), price.toString());
-                TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
-                txtPrice.setText(text);
+        if (balanceAfter >= 0) {
+            Resources res = getResources();
+            String text = String.format(res.getString(R.string.price), price.toString());
+            TextView txtPrice = (TextView) findViewById(R.id.txtPrice);
+            txtPrice.setText(text);
 
-                text = String.format(res.getString(R.string.afterTransaction), balanceAfter.toString());
-                TextView txtAfter = (TextView) findViewById(R.id.txtAfter);
-                txtAfter.setText(text);
-            } else {
-
-            }
-
+            text = String.format(res.getString(R.string.afterTransaction), balanceAfter.toString());
+            TextView txtAfter = (TextView) findViewById(R.id.txtAfter);
+            txtAfter.setText(text);
+        }
 
     }
 

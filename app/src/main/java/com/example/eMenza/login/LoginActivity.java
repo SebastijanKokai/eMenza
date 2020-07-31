@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eMenza.MainActivity;
 import com.example.eMenza.R;
-import com.example.eMenza.User;
+import com.example.eMenza.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,7 +26,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Pattern;
@@ -61,11 +60,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        txtEmail = (EditText) findViewById(R.id.txtEmail);
-        txtPassword = (EditText) findViewById(R.id.txtPassword);
-        btnLogin = (Button) findViewById(R.id.btnLogin);
-        txtRegister = (TextView) findViewById(R.id.txtRegister);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        txtEmail = findViewById(R.id.txtEmail);
+        txtPassword = findViewById(R.id.txtPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+        txtRegister = findViewById(R.id.txtRegister);
+        progressBar = findViewById(R.id.progressBar);
 
         firebaseAuth = FirebaseAuth.getInstance();
         reference = FirebaseDatabase.getInstance().getReference();
@@ -82,15 +81,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             onAuthSuccess(firebaseAuth.getCurrentUser());
         }
     }
-
-    //    private void writeNewUser(String userId, String name, String surname, String college, String cardNumber, String dateOfBirth, String dateOfIssue, String dateOfExpire,
-//                              String email, String password, Integer numberOfBreakfast, Integer numberOfLunch, Integer numberOfDinner) {
-//
-//        User user = new User(name, surname, college, cardNumber,
-//                dateOfBirth, dateOfIssue, dateOfExpire, email, password, numberOfBreakfast, numberOfLunch, numberOfDinner);
-//
-//        reference.child("users").child(userId).setValue(user);
-//    }
 
     private void onAuthSuccess(FirebaseUser user) {
         // Read user from firebase and send as putExtra object
@@ -112,7 +102,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         };
 
         reference = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
-        reference.addValueEventListener(userListener);
+        reference.addListenerForSingleValueEvent(userListener);
     }
 
     private void signIn() {
@@ -170,66 +160,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
         }
     }
-
-
-    // CODE FOR SAVING
-
-//    final String email = txtEmail.getText().toString().trim();
-//    final String password = txtPassword.getText().toString().trim();
-//
-//        if(TextUtils.isEmpty(email)) {
-//        txtEmail.setError("Email is required.");
-//        return;
-//    }
-//        else if(TextUtils.isEmpty(password)) {
-//        txtPassword.setError("Password is required.");
-//        return;
-//    }
-//        else if(!EMAIL_ADDRESS_PATTERN.matcher(email).matches()){
-//        txtEmail.setError("Email is not valid.");
-//        return;
-//    }
-//
-//    // Retrieve all data for the user from the firebase
-//    // Authenticate the user
-//
-//    reference = FirebaseDatabase.getInstance().getReference("users");
-//        reference.addValueEventListener(new ValueEventListener() {
-//        @Override
-//        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//            User user = snapshot.getValue(User.class);
-//            Log.v("Login", user.getEmail());
-//            Log.v("Login", user.getPassword());
-//            Log.v("Login", user.getNumberOfBreakfast().toString());
-//
-//        }
-//
-//        @Override
-//        public void onCancelled(@NonNull DatabaseError error) {
-//            Log.e("Login", "Jbg druze");
-//        }
-//    });
-//
-//
-//        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//        @Override
-//        public void onComplete(@NonNull Task<AuthResult> task) {
-//            if(task.isSuccessful()) {
-//                progressBar.setVisibility(View.VISIBLE);
-//                Toast.makeText(LoginActivity.this, "Logged in.", Toast.LENGTH_SHORT).show();
-//
-//                FirebaseUser user = firebaseAuth.getCurrentUser();
-//                if(user != null) {
-//
-//                } else {
-//
-//                }
-//
-//                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//            } else {
-//                progressBar.setVisibility(View.INVISIBLE);
-//                Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    });
 }

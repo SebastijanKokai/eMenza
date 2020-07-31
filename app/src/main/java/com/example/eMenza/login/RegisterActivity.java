@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.eMenza.MainActivity;
 import com.example.eMenza.R;
-import com.example.eMenza.User;
+import com.example.eMenza.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -60,13 +60,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        btnRegister = (Button) findViewById(R.id.btnRegister);
-        txtEmail = (EditText) findViewById(R.id.txtEmail);
-        txtCardNumber = (EditText) findViewById(R.id.txtCardNumber);
-        txtPassword = (EditText) findViewById(R.id.txtPassword);
-        txtPasswordConfirm = (EditText) findViewById(R.id.txtPasswordConfirm);
-        txtAlreadyRegistered = (TextView) findViewById(R.id.textAlreadyRegistered);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        btnRegister = findViewById(R.id.btnRegister);
+        txtEmail = findViewById(R.id.txtEmail);
+        txtCardNumber = findViewById(R.id.txtCardNumber);
+        txtPassword =findViewById(R.id.txtPassword);
+        txtPasswordConfirm = findViewById(R.id.txtPasswordConfirm);
+        txtAlreadyRegistered = findViewById(R.id.textAlreadyRegistered);
+        progressBar = findViewById(R.id.progressBar);
 
         firebaseAuth = FirebaseAuth.getInstance();
         reference = FirebaseDatabase.getInstance().getReference();
@@ -155,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private boolean isPasswordMatching(String password, String confirmPassword) {
-        Pattern pattern = Pattern.compile(password, Pattern.CASE_INSENSITIVE); // How to make case sensitive???
+        Pattern pattern = Pattern.compile(password, Pattern.UNICODE_CASE);
         Matcher matcher = pattern.matcher(confirmPassword);
 
         if (!matcher.matches())
@@ -169,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (i == R.id.btnRegister) {
             signUp();
         } else if (i == R.id.textAlreadyRegistered) {
-            startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
     }
 }
